@@ -10,6 +10,7 @@ exports.createOrder = async (req, res) => {
     }
 
     let totalAmount = 0;
+    let totalWeightInGrams = 0;
     const orderItems = [];
 
     for (const item of cart.items) {
@@ -23,19 +24,31 @@ exports.createOrder = async (req, res) => {
       await product.save();
 
       totalAmount += product.price * item.quantity;
+      
+      // Calculate weight in grams for order total
+      let itemWeightInGrams = product.weightUnit === 'kg' ? (product.weightValue * 1000) : product.weightValue;
+      totalWeightInGrams += (itemWeightInGrams * item.quantity);
+
       orderItems.push({
         productId: product._id,
         name: product.name,
         price: product.price,
-        weight: product.weight,
+        weightValue: product.weightValue,
+        weightUnit: product.weightUnit,
         quantity: item.quantity
       });
     }
 
+    // Format total weight for display
+    let totalWeightDisplay = totalWeightInGrams >= 1000 
+      ? `${(totalWeightInGrams / 1000).toFixed(2)} kg` 
+      : `${totalWeightInGrams.toFixed(0)} g`;
+
     const order = new Order({
       userId: req.user._id,
       items: orderItems,
-      totalAmount
+      totalAmount,
+      totalWeight: totalWeightDisplay
     });
 
     await order.save();
