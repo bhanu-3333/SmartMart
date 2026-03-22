@@ -1,7 +1,7 @@
 const Product = require('../models/Product');
 
 exports.createProduct = async (req, res) => {
-  const { name, price, stock, barcode } = req.body;
+  const { name, price, stock, barcode, weightValue, weightUnit } = req.body;
   try {
     const existing = await Product.findOne({ barcode });
     if (existing) return res.status(400).json({ message: 'Barcode already exists' });
@@ -11,6 +11,8 @@ exports.createProduct = async (req, res) => {
       price,
       stock,
       barcode,
+      weightValue,
+      weightUnit,
       createdBy: req.user._id
     });
     res.status(201).json(product);
@@ -40,10 +42,12 @@ exports.getProductByBarcode = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   try {
+    console.log("Updating product:", req.params.id, "with data:", req.body);
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!product) return res.status(404).json({ message: 'Product not found' });
     res.json(product);
   } catch (error) {
+    console.error("Update Product Error:", error);
     res.status(500).json({ message: error.message });
   }
 };
