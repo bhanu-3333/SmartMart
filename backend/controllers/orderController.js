@@ -68,44 +68,74 @@ exports.getAllOrders = async (req, res) => {
 
 exports.getAdminStats = async (req, res) => {
   try {
+    console.log("Fetching Admin Stats...");
     const totalRevenue = await Order.aggregate([{ $group: { _id: null, total: { $sum: '$totalAmount' } } }]);
     const totalOrders = await Order.countDocuments();
     const totalProducts = await Product.countDocuments();
     const lowStockProducts = await Product.find({ stock: { $lt: 10 } });
 
-    res.json({
+    const stats = {
       totalRevenue: totalRevenue[0]?.total || 0,
       totalOrders,
       totalProducts,
       lowStockProducts
-    });
+    };
+    console.log("Admin Stats Result:", stats);
+    res.json(stats);
   } catch (err) {
+    console.error("Error in getAdminStats:", err);
     res.status(500).json({ message: err.message });
   }
 };
 
 exports.getTodayStats = async (req, res) => {
   try {
+    console.log("Fetching Today's Stats...");
     const startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
+    // Use the next day to ensure we cover the full current day
+    const endOfToday = new Date(startOfToday);
+    endOfToday.setDate(endOfToday.getDate() + 1);
 
-    const todayOrders = await Order.find({ createdAt: { $gte: startOfToday } }).populate('userId', 'name email');
+    console.log(`Filtering orders from ${startOfToday.toISOString()} to ${endOfToday.toISOString()}`);
+
+    const todayOrders = await Order.find({ 
+      createdAt: { 
+        $gte: startOfToday,
+        $lt: endOfToday
+      } 
+    }).populate('userId', 'name email');
     
     const todayRevenue = todayOrders.reduce((sum, order) => sum + order.totalAmount, 0);
-    const uniqueCustomers = [...new Set(todayOrders.map(o => o.userId._id.toString()))].length;
+    const uniqueCustomers = [...new Set(todayOrders.map(o => o.userId?._id?.toString()).filter(id => id))].length;
 
-    res.json({
+    const totalProducts = await Product.countDocuments();
+    const totalLifetimeRevenueAggregate = await Order.aggregate([{ $group: { _id: null, total: { $sum: '$totalAmount' } } }]);
+    const totalLifetimeRevenue = totalLifetimeRevenueAggregate[0]?.total || 0;
+
+    const stats = {
       todayRevenue,
       todayCustomerCount: uniqueCustomers,
+      totalProducts, // Added here as requested by user's "Expected" output
+      totalRevenue: totalLifetimeRevenue, // Added here as requested by user's "Expected" output
       todayOrders: todayOrders.map(o => ({
         _id: o._id,
-        customerName: o.userId.name,
+        customerName: o.userId?.name || 'Guest',
         time: o.createdAt,
         totalAmount: o.totalAmount,
         items: o.items
       }))
+    };
+    
+    console.log("Today's Stats Result:", { 
+      orderCount: todayOrders.length, 
+      revenue: todayRevenue, 
+      customers: uniqueCustomers 
     });
+    
+    res.json(stats);
   } catch (err) {
+    console.error("Error in getTodayStats:", err);
     res.status(500).json({ message: err.message });
   }
 };
