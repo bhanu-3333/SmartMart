@@ -239,7 +239,7 @@ const ProductListPage = () => {
               <td>{p.name}</td>
               <td>${p.price.toFixed(2)}</td>
               <td>{p.stock}</td>
-              <td>{p.weight}kg</td>
+              <td>{p.weightValue}{p.weightUnit}</td>
             </tr>
           ))}
         </tbody>
