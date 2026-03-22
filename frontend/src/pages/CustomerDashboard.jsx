@@ -20,9 +20,17 @@ const CustomerDashboard = () => {
   const fetchCart = async () => {
     try {
       const { data } = await getCart();
+      console.log("CustomerDashboard: Fetched cart data:", data);
+      if (data.items.length > 0) {
+        console.log("Sample Product Weight in Cart:", {
+          name: data.items[0].productId.name,
+          weightValue: data.items[0].productId.weightValue,
+          weightUnit: data.items[0].productId.weightUnit
+        });
+      }
       setCart(data);
     } catch (err) {
-      console.error(err);
+      console.error("fetchCart error:", err);
     }
   };
 
@@ -96,7 +104,19 @@ const CustomerDashboard = () => {
   };
 
   const totalAmount = cart.items.reduce((sum, item) => sum + (item.productId.price * item.quantity), 0);
-  const totalWeight = cart.items.reduce((sum, item) => sum + ((item.productId.weight || 0) * item.quantity), 0);
+  
+  // Calculate total weight in grams first
+  const totalWeightGrams = cart.items.reduce((sum, item) => {
+    const val = item.productId.weightValue || 0;
+    const unit = item.productId.weightUnit || 'kg';
+    const weightInGrams = unit === 'kg' ? val * 1000 : val;
+    return sum + (weightInGrams * item.quantity);
+  }, 0);
+
+  const formatWeight = (grams) => {
+    if (grams >= 1000) return `${(grams / 1000).toFixed(2)} kg`;
+    return `${grams.toFixed(0)} g`;
+  };
 
   return (
     <div className="container fade-in">
@@ -161,7 +181,7 @@ const CustomerDashboard = () => {
                               <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{item.productId.barcode}</div>
                             </td>
                             <td>{item.quantity}</td>
-                            <td>{(item.productId.weight * item.quantity).toFixed(2)}kg</td>
+                            <td>{item.productId.weightValue}{item.productId.weightUnit}</td>
                             <td>${(item.productId.price * item.quantity).toFixed(2)}</td>
                             <td>
                               <button className="btn btn-outline" style={{ color: 'var(--danger)' }} onClick={() => handleRemove(item.productId._id)}>
@@ -177,7 +197,7 @@ const CustomerDashboard = () => {
                   <div style={{ borderTop: '2px solid var(--border)', paddingTop: '1.5rem', marginTop: '1.5rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                       <span>Total Weight:</span>
-                      <span style={{ fontWeight: 600 }}>{totalWeight.toFixed(2)}kg</span>
+                      <span style={{ fontWeight: 600 }}>{formatWeight(totalWeightGrams)}</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', fontSize: '1.2rem', fontWeight: 700 }}>
                       <span>Total Amount:</span>
@@ -206,10 +226,10 @@ const CustomerDashboard = () => {
                       <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>ORDER ID: {order._id}</div>
                       <div style={{ fontWeight: 700 }}>{new Date(order.createdAt).toLocaleString()}</div>
                     </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '1.2rem' }}>${order.totalAmount.toFixed(2)}</div>
-                      <div style={{ fontSize: '0.875rem' }}>Total Weight: {order.items.reduce((s, i) => s + (i.weight * i.quantity), 0).toFixed(2)}kg</div>
-                    </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '1.2rem' }}>${order.totalAmount.toFixed(2)}</div>
+                        <div style={{ fontSize: '0.875rem' }}>Total Weight: {order.totalWeight}</div>
+                      </div>
                   </div>
                   <table style={{ background: 'white' }}>
                     <thead>
@@ -226,7 +246,7 @@ const CustomerDashboard = () => {
                         <tr key={idx}>
                           <td>{item.name}</td>
                           <td>{item.quantity}</td>
-                          <td>{item.weight}kg</td>
+                          <td>{item.weightValue}{item.weightUnit}</td>
                           <td>${item.price.toFixed(2)}</td>
                           <td>${(item.price * item.quantity).toFixed(2)}</td>
                         </tr>
