@@ -9,7 +9,7 @@ const StaffDashboard = () => {
   const [showModal, setShowModal] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
-  const [formData, setFormData] = useState({ name: '', price: '', stock: '', barcode: '', weight: '' });
+  const [formData, setFormData] = useState({ name: '', price: '', stock: '', barcode: '', weightValue: '', weightUnit: 'kg' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -80,7 +80,8 @@ const StaffDashboard = () => {
       price: product.price, 
       stock: product.stock, 
       barcode: product.barcode,
-      weight: product.weight || 0
+      weightValue: product.weightValue || 0,
+      weightUnit: product.weightUnit || 'kg'
     });
     setShowModal(true);
   };
@@ -167,7 +168,7 @@ const StaffDashboard = () => {
                   <td><code>{product.barcode}</code></td>
                   <td>{product.name}</td>
                   <td>${product.price ? product.price.toFixed(2) : '0.00'}</td>
-                  <td>{product.weight || 0}kg</td>
+                  <td>{product.weightValue}{product.weightUnit}</td>
                   <td>
                     <span className={`badge ${product.stock < 10 ? 'badge-danger' : 'badge-success'}`}>
                       {product.stock} units
@@ -256,15 +257,28 @@ const StaffDashboard = () => {
                       onChange={(e) => setFormData({ ...formData, stock: e.target.value })} 
                     />
                   </div>
-                  <div className="form-group">
-                    <label className="label">Weight (kg)</label>
-                    <input 
-                      type="number" 
-                      step="0.01"
-                      placeholder="0.00" 
-                      value={formData.weight}
-                      onChange={(e) => setFormData({ ...formData, weight: e.target.value })} 
-                    />
+                  <div className="form-group" style={{ display: 'flex', gap: '0.5rem', marginBottom: 0 }}>
+                    <div style={{ flex: 2 }}>
+                      <label className="label">Weight</label>
+                      <input 
+                        type="number" 
+                        step="0.1"
+                        placeholder="0.0" 
+                        value={formData.weightValue}
+                        onChange={(e) => setFormData({ ...formData, weightValue: e.target.value })} 
+                      />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <label className="label">Unit</label>
+                      <select 
+                        value={formData.weightUnit}
+                        onChange={(e) => setFormData({ ...formData, weightUnit: e.target.value })}
+                        style={{ height: '45px' }}
+                      >
+                        <option value="kg">kg</option>
+                        <option value="g">g</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
                 <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
