@@ -7,11 +7,13 @@ const orderSchema = new mongoose.Schema({
       productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
       name: { type: String, required: true },
       price: { type: Number, required: true },
-      weight: { type: Number, default: 0 },
+      weightValue: { type: Number, default: 0 },
+      weightUnit: { type: String, default: 'kg' },
       quantity: { type: Number, required: true }
     }
   ],
   totalAmount: { type: Number, required: true },
+  totalWeight: { type: String, required: true },
   status: { type: String, default: 'placed' }
 }, { timestamps: true });
 
