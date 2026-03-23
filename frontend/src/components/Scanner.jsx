@@ -70,18 +70,22 @@ const Scanner = ({ onScan, onClose }) => {
           // Debugging
           console.log("ZXing Scanned:", code);
 
-          // Debounce same code for 2 seconds
-          if (code === lastResultRef.current && (now - lastScanTimeRef.current < 2000)) {
+          // Cooldown for SAME code: 1.5 seconds (Reduced from 2.0s for speed)
+          if (code === lastResultRef.current && (now - lastScanTimeRef.current < 1500)) {
             return;
           }
 
           lastResultRef.current = code;
           lastScanTimeRef.current = now;
 
-          // Flash UI Effect
+          // Haptic-like visual feedback (Green Flash)
           if (videoRef.current) {
-            videoRef.current.style.filter = 'brightness(1.5) contrast(1.2)';
-            setTimeout(() => { if(videoRef.current) videoRef.current.style.filter = 'none'; }, 150);
+            videoRef.current.style.transition = 'none';
+            videoRef.current.style.filter = 'brightness(2) sepia(1) hue-rotate(80deg)';
+            setTimeout(() => { if(videoRef.current) {
+              videoRef.current.style.transition = 'filter 0.3s';
+              videoRef.current.style.filter = 'none'; 
+            }}, 200);
           }
 
           onScan(code);
@@ -160,8 +164,8 @@ const Scanner = ({ onScan, onClose }) => {
                 <button className="btn btn-outline" onClick={() => startScanning(selectedCamera)} style={{ marginTop: '1rem', color: '#fff' }}>Retry</button>
               </div>
             ) : (
-              <div style={{ position: 'relative', width: '100%', height: '350px', background: '#000' }}>
-                <video ref={videoRef} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{ position: 'relative', width: '100%', minHeight: '300px', maxHeight: '70vh', background: '#000' }}>
+                <video ref={videoRef} style={{ width: '100%', height: '100%', maxHeight: '70vh', objectFit: 'cover' }} />
                 <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, border: '2px dashed rgba(255,255,255,0.3)', pointerEvents: 'none', margin: '40px' }}>
                   <div style={{ 
                     position: 'absolute', 
