@@ -23,6 +23,7 @@ export const deleteProduct = (id) => API.delete(`/products/${id}`);
 
 export const getCart = () => API.get('/cart');
 export const addToCart = (code) => API.post('/cart/add', { code });
+export const updateCartQuantity = (productId, quantity) => API.put('/cart/quantity', { productId, quantity });
 export const removeFromCart = (productId) => API.delete(`/cart/${productId}`);
 
 export const createOrder = () => API.post('/orders');
