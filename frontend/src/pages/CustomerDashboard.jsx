@@ -75,6 +75,26 @@ const CustomerDashboard = () => {
     }
   }, [lastScannedCode]);
 
+  const handleUpdateQuantity = async (productId, currentQty, delta) => {
+    const newQty = currentQty + delta;
+    if (newQty < 1) {
+      handleRemove(productId);
+      return;
+    }
+
+    try {
+      console.log(`Updating product ${productId} quantity to ${newQty}`);
+      const { data } = await updateCartQuantity(productId, newQty);
+      setCart(data);
+      setMessage({ text: 'Quantity updated', type: 'success' });
+      setTimeout(() => setMessage({ text: '', type: '' }), 1500);
+    } catch (err) {
+      console.error("Update quantity error:", err);
+      setMessage({ text: err.response?.data?.message || 'Update failed', type: 'error' });
+      setTimeout(() => setMessage({ text: '', type: '' }), 3000);
+    }
+  };
+
   const handleRemove = async (productId) => {
     try {
       console.log("Removing item from cart:", productId);
@@ -162,7 +182,7 @@ const CustomerDashboard = () => {
                 <p style={{ textAlign: 'center', padding: '2rem' }}>Empty cart. Start scanning!</p>
               ) : (
                 <>
-                  <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                  <div className="table-container" style={{ maxHeight: '400px' }}>
                     <table>
                       <thead>
                         <tr>
@@ -180,11 +200,25 @@ const CustomerDashboard = () => {
                               <div style={{ fontWeight: 600 }}>{item.productId.name}</div>
                               <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{item.productId.barcode}</div>
                             </td>
-                            <td>{item.quantity}</td>
+                            <td>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <button 
+                                  className="btn btn-outline" 
+                                  style={{ padding: '0.2rem 0.5rem', minWidth: '30px' }}
+                                  onClick={() => handleUpdateQuantity(item.productId._id, item.quantity, -1)}
+                                >-</button>
+                                <span style={{ fontWeight: 600, minWidth: '20px', textAlign: 'center' }}>{item.quantity}</span>
+                                <button 
+                                  className="btn btn-primary" 
+                                  style={{ padding: '0.2rem 0.5rem', minWidth: '30px' }}
+                                  onClick={() => handleUpdateQuantity(item.productId._id, item.quantity, 1)}
+                                >+</button>
+                              </div>
+                            </td>
                             <td>{item.productId.weightValue}{item.productId.weightUnit}</td>
                             <td>${(item.productId.price * item.quantity).toFixed(2)}</td>
                             <td>
-                              <button className="btn btn-outline" style={{ color: 'var(--danger)' }} onClick={() => handleRemove(item.productId._id)}>
+                              <button className="btn btn-outline" style={{ color: 'var(--danger)', padding: '0.4rem' }} onClick={() => handleRemove(item.productId._id)}>
                                 <Trash2 size={16} />
                               </button>
                             </td>
@@ -231,28 +265,30 @@ const CustomerDashboard = () => {
                         <div style={{ fontSize: '0.875rem' }}>Total Weight: {order.totalWeight}</div>
                       </div>
                   </div>
-                  <table style={{ background: 'white' }}>
-                    <thead>
-                      <tr>
-                        <th>Item</th>
-                        <th>Qty</th>
-                        <th>Weight</th>
-                        <th>Price</th>
-                        <th>Subtotal</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {order.items.map((item, idx) => (
-                        <tr key={idx}>
-                          <td>{item.name}</td>
-                          <td>{item.quantity}</td>
-                          <td>{item.weightValue}{item.weightUnit}</td>
-                          <td>${item.price.toFixed(2)}</td>
-                          <td>${(item.price * item.quantity).toFixed(2)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                    <div className="table-container">
+                      <table style={{ background: 'white' }}>
+                        <thead>
+                          <tr>
+                            <th>Item</th>
+                            <th>Qty</th>
+                            <th>Weight</th>
+                            <th>Price</th>
+                            <th>Subtotal</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {order.items.map((item, idx) => (
+                            <tr key={idx}>
+                              <td>{item.name}</td>
+                              <td>{item.quantity}</td>
+                              <td>{item.weightValue}{item.weightUnit}</td>
+                              <td>${item.price.toFixed(2)}</td>
+                              <td>${(item.price * item.quantity).toFixed(2)}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                 </div>
               ))}
             </div>
