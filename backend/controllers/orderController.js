@@ -152,38 +152,3 @@ exports.getTodayStats = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-exports.getDailyRevenue = async (req, res) => {
-  try {
-    const dailyRevenue = await Order.aggregate([
-      {
-        $group: {
-          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-          totalRevenue: { $sum: "$totalAmount" },
-          orderCount: { $sum: 1 }
-        }
-      },
-      { $sort: { _id: -1 } }
-    ]);
-    res.json(dailyRevenue);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-exports.getOrdersByDate = async (req, res) => {
-  try {
-    const { date } = req.params; // Expecting YYYY-MM-DD
-    const start = new Date(date);
-    start.setHours(0, 0, 0, 0);
-    const end = new Date(date);
-    end.setHours(23, 59, 59, 999);
-
-    const orders = await Order.find({
-      createdAt: { $gte: start, $lte: end }
-    }).populate('userId', 'name email').sort({ createdAt: -1 });
-
-    res.json(orders);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
