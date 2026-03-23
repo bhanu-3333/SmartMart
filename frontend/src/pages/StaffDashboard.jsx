@@ -151,41 +151,43 @@ const StaffDashboard = () => {
 
       <div className="card">
         {loading ? <p>Loading inventory...</p> : (
-          <table>
-            <thead>
-              <tr>
-                <th>Barcode</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Weight</th>
-                <th>Stock</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredProducts.map((product) => (
-                <tr key={product._id} className={product.stock === 0 ? 'bg-muted' : ''}>
-                  <td><code>{product.barcode}</code></td>
-                  <td>{product.name}</td>
-                  <td>${product.price ? product.price.toFixed(2) : '0.00'}</td>
-                  <td>{product.weightValue}{product.weightUnit}</td>
-                  <td>
-                    <span className={`badge ${product.stock < 10 ? 'badge-danger' : 'badge-success'}`}>
-                      {product.stock} units
-                    </span>
-                  </td>
-                  <td>
-                    <button className="btn btn-outline" style={{ padding: '0.4rem', marginRight: '0.5rem' }} onClick={() => handleEdit(product)}>
-                      <Edit size={16} />
-                    </button>
-                    <button className="btn btn-outline" style={{ padding: '0.4rem', color: 'var(--danger)' }} onClick={() => handleDelete(product._id)}>
-                      <Trash2 size={16} />
-                    </button>
-                  </td>
+          <div className="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Barcode</th>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Weight</th>
+                  <th>Stock</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredProducts.map((product) => (
+                  <tr key={product._id} className={product.stock === 0 ? 'bg-muted' : ''}>
+                    <td><code>{product.barcode}</code></td>
+                    <td>{product.name}</td>
+                    <td>${product.price ? product.price.toFixed(2) : '0.00'}</td>
+                    <td>{product.weightValue}{product.weightUnit}</td>
+                    <td>
+                      <span className={`badge ${product.stock < 10 ? 'badge-danger' : 'badge-success'}`}>
+                        {product.stock} units
+                      </span>
+                    </td>
+                    <td>
+                      <button className="btn btn-outline" style={{ padding: '0.4rem', marginRight: '0.5rem' }} onClick={() => handleEdit(product)}>
+                        <Edit size={16} />
+                      </button>
+                      <button className="btn btn-outline" style={{ padding: '0.4rem', color: 'var(--danger)' }} onClick={() => handleDelete(product._id)}>
+                        <Trash2 size={16} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 
