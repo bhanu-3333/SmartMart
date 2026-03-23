@@ -109,24 +109,28 @@ const AdminDashboard = () => {
               <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
                 <Clock size={20} /> Recent Orders
               </h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Customer</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recentOrders.map(order => (
-                    <tr key={order._id}>
-                      <td>{order.userId?.name || 'Guest'}</td>
-                      <td>${order.totalAmount.toFixed(2)}</td>
-                      <td><span className="badge badge-success">Completed</span></td>
+              <div className="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Customer</th>
+                      <th>Amount</th>
+                      <th>Time</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {recentOrders.map(order => (
+                      <tr key={order._id}>
+                        <td><code>{order._id}</code></td>
+                        <td>{order.userId?.name || 'Guest'}</td>
+                        <td>${order.totalAmount.toFixed(2)}</td>
+                        <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             <div className="card">
@@ -222,28 +226,30 @@ const ProductListPage = () => {
   return (
     <div className="card fade-in">
       <h2>All Inventory Products</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Barcode</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Weight</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map(p => (
-            <tr key={p._id}>
-              <td><code>{p.barcode}</code></td>
-              <td>{p.name}</td>
-              <td>${p.price.toFixed(2)}</td>
-              <td>{p.stock}</td>
-              <td>{p.weightValue}{p.weightUnit}</td>
+      <div className="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Barcode</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Weight</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {products.map(p => (
+              <tr key={p._id}>
+                <td><code>{p.barcode}</code></td>
+                <td>{p.name}</td>
+                <td>${p.price.toFixed(2)}</td>
+                <td>{p.stock}</td>
+                <td>{p.weightValue}{p.weightUnit}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
