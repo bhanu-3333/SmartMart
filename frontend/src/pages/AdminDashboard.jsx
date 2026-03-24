@@ -52,53 +52,57 @@ const AdminDashboard = () => {
 
       {view === 'overview' ? (
         <>
-          <div className="grid grid-4" style={{ marginBottom: '2rem' }}>
-            <div className="card" style={{ borderLeft: '4px solid var(--primary)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div>
-                  <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem', fontWeight: 600 }}>TODAY'S REVENUE</div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>${todayStats.todayRevenue.toFixed(2)}</div>
-                </div>
-                <div style={{ background: 'rgba(37, 99, 235, 0.1)', color: 'var(--primary)', padding: '0.5rem', borderRadius: '8px' }}>
+          <div className="grid grid-4" style={{ marginBottom: '3rem', gap: '1.5rem' }}>
+            <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', borderTop: '4px solid var(--primary)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div style={{ background: 'rgba(99, 102, 241, 0.1)', color: 'var(--primary)', padding: '0.75rem', borderRadius: '12px' }}>
                   <DollarSign size={24} />
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Today's Revenue</div>
+                  <div style={{ fontSize: '1.75rem', fontWeight: 800 }}>${todayStats.todayRevenue.toFixed(2)}</div>
                 </div>
               </div>
             </div>
 
-            <div className="card" style={{ borderLeft: '4px solid var(--success)', cursor: 'pointer' }} onClick={() => setShowCustomerModal(true)}>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div>
-                  <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem', fontWeight: 600 }}>TODAY'S CUSTOMERS</div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>{todayStats.todayCustomerCount}</div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--success)', marginTop: '0.25rem' }}>View List <ChevronRight size={12} /></div>
-                </div>
-                <div style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)', padding: '0.5rem', borderRadius: '8px' }}>
+            <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', borderTop: '4px solid var(--success)', cursor: 'pointer' }} onClick={() => setShowCustomerModal(true)}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)', padding: '0.75rem', borderRadius: '12px' }}>
                   <Users size={24} />
                 </div>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Today's Customers</div>
+                  <div style={{ fontSize: '1.75rem', fontWeight: 800 }}>{todayStats.todayCustomerCount}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: 'var(--success)', fontSize: '0.75rem', fontWeight: 600, justifyContent: 'flex-end', marginTop: '0.25rem' }}>
+                    View Records <ChevronRight size={14} />
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="card" style={{ borderLeft: '4px solid #f59e0b', cursor: 'pointer' }} onClick={() => setView('products')}>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div>
-                  <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem', fontWeight: 600 }}>TOTAL PRODUCTS</div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>{stats.totalProducts}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#f59e0b', marginTop: '0.25rem' }}>View All <ChevronRight size={12} /></div>
-                </div>
-                <div style={{ background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', padding: '0.5rem', borderRadius: '8px' }}>
+            <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', borderTop: '4px solid var(--warning)', cursor: 'pointer' }} onClick={() => setView('products')}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div style={{ background: 'rgba(245, 158, 11, 0.1)', color: 'var(--warning)', padding: '0.75rem', borderRadius: '12px' }}>
                   <Box size={24} />
                 </div>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Products</div>
+                  <div style={{ fontSize: '1.75rem', fontWeight: 800 }}>{stats.totalProducts}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: 'var(--warning)', fontSize: '0.75rem', fontWeight: 600, justifyContent: 'flex-end', marginTop: '0.25rem' }}>
+                    Inventory <ChevronRight size={14} />
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="card" style={{ borderLeft: '4px solid var(--danger)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div>
-                  <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem', fontWeight: 600 }}>TOTAL REVENUE</div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>${stats.totalRevenue.toFixed(2)}</div>
+            <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', borderTop: '4px solid var(--danger)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div style={{ background: 'rgba(244, 63, 94, 0.1)', color: 'var(--danger)', padding: '0.75rem', borderRadius: '12px' }}>
+                  <ShoppingBag size={24} />
                 </div>
-                <div style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', padding: '0.5rem', borderRadius: '8px' }}>
-                  <DollarSign size={24} />
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total Sales</div>
+                  <div style={{ fontSize: '1.75rem', fontWeight: 800 }}>${stats.totalRevenue.toFixed(2)}</div>
                 </div>
               </div>
             </div>
