@@ -179,17 +179,23 @@ const CustomerDashboard = () => {
             <div className="card">
               <h2><ShoppingCart size={24} /> Your Cart</h2>
               {cart.items.length === 0 ? (
-                <p style={{ textAlign: 'center', padding: '2rem' }}>Empty cart. Start scanning!</p>
+                <div style={{ textAlign: 'center', padding: '4rem 2rem', color: 'var(--text-muted)' }}>
+                  <div style={{ background: 'var(--bg)', width: '80px', height: '80px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
+                    <ShoppingCart size={40} style={{ opacity: 0.4 }} />
+                  </div>
+                  <h3>Your cart is empty</h3>
+                  <p>Scan a product to see it appear here!</p>
+                </div>
               ) : (
                 <>
-                  <div className="table-container" style={{ maxHeight: '400px' }}>
+                  <div className="table-container" style={{ maxHeight: '420px', border: 'none' }}>
                     <table>
                       <thead>
                         <tr>
-                          <th>Item</th>
-                          <th>Qty</th>
+                          <th>Product</th>
+                          <th style={{ textAlign: 'center' }}>Quantity</th>
                           <th>Weight</th>
-                          <th>Price</th>
+                          <th>Total</th>
                           <th></th>
                         </tr>
                       </thead>
@@ -197,29 +203,40 @@ const CustomerDashboard = () => {
                         {cart.items.map((item) => (
                           <tr key={item.productId._id}>
                             <td>
-                              <div style={{ fontWeight: 600 }}>{item.productId.name}</div>
-                              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{item.productId.barcode}</div>
+                              <div style={{ fontWeight: 600, color: 'var(--text)' }}>{item.productId.name}</div>
+                              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'monospace' }}>{item.productId.barcode}</div>
                             </td>
                             <td>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <div style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                background: 'var(--bg)', 
+                                padding: '0.25rem', 
+                                borderRadius: '10px',
+                                width: 'fit-content',
+                                margin: '0 auto'
+                              }}>
                                 <button 
-                                  className="btn btn-outline" 
-                                  style={{ padding: '0.2rem 0.5rem', minWidth: '30px' }}
+                                  className="btn-icon" 
+                                  style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: '6px', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
                                   onClick={() => handleUpdateQuantity(item.productId._id, item.quantity, -1)}
                                 >-</button>
-                                <span style={{ fontWeight: 600, minWidth: '20px', textAlign: 'center' }}>{item.quantity}</span>
+                                <span style={{ fontWeight: 700, margin: '0 0.75rem', minWidth: '20px', textAlign: 'center' }}>{item.quantity}</span>
                                 <button 
-                                  className="btn btn-primary" 
-                                  style={{ padding: '0.2rem 0.5rem', minWidth: '30px' }}
+                                  className="btn-icon" 
+                                  style={{ background: 'var(--primary)', border: 'none', color: '#fff', borderRadius: '6px', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
                                   onClick={() => handleUpdateQuantity(item.productId._id, item.quantity, 1)}
                                 >+</button>
                               </div>
                             </td>
-                            <td>{item.productId.weightValue}{item.productId.weightUnit}</td>
-                            <td>${(item.productId.price * item.quantity).toFixed(2)}</td>
+                            <td style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{item.productId.weightValue}{item.productId.weightUnit}</td>
+                            <td style={{ fontWeight: 600 }}>${(item.productId.price * item.quantity).toFixed(2)}</td>
                             <td>
-                              <button className="btn btn-outline" style={{ color: 'var(--danger)', padding: '0.4rem' }} onClick={() => handleRemove(item.productId._id)}>
-                                <Trash2 size={16} />
+                              <button 
+                                style={{ background: 'none', border: 'none', color: 'var(--danger)', cursor: 'pointer', padding: '0.5rem', display: 'flex' }} 
+                                onClick={() => handleRemove(item.productId._id)}
+                              >
+                                <Trash2 size={18} />
                               </button>
                             </td>
                           </tr>
@@ -228,17 +245,23 @@ const CustomerDashboard = () => {
                     </table>
                   </div>
                   
-                  <div style={{ borderTop: '2px solid var(--border)', paddingTop: '1.5rem', marginTop: '1.5rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                      <span>Total Weight:</span>
+                  <div style={{ 
+                    background: 'var(--bg)', 
+                    borderRadius: '16px', 
+                    padding: '1.5rem', 
+                    marginTop: '2rem',
+                    border: '1px solid var(--border)'
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                      <span style={{ color: 'var(--text-muted)' }}>Net Weight</span>
                       <span style={{ fontWeight: 600 }}>{formatWeight(totalWeightGrams)}</span>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', fontSize: '1.2rem', fontWeight: 700 }}>
-                      <span>Total Amount:</span>
-                      <span style={{ color: 'var(--primary)' }}>${totalAmount.toFixed(2)}</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+                      <span style={{ fontSize: '1.1rem', fontWeight: 600 }}>Grand Total</span>
+                      <span style={{ color: 'var(--primary)', fontSize: '1.5rem', fontWeight: 800 }}>${totalAmount.toFixed(2)}</span>
                     </div>
-                    <button className="btn btn-primary" style={{ width: '100%', padding: '1rem' }} onClick={handlePlaceOrder} disabled={loading}>
-                      {loading ? 'Processing...' : 'Complete Purchase'}
+                    <button className="btn btn-primary" style={{ width: '100%', padding: '1.2rem', fontSize: '1rem', boxShadow: '0 8px 16px -4px rgba(99, 102, 241, 0.4)' }} onClick={handlePlaceOrder} disabled={loading}>
+                      {loading ? 'Processing...' : 'Secure Checkout'}
                     </button>
                   </div>
                 </>
