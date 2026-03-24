@@ -116,79 +116,130 @@ const Scanner = ({ onScan, onClose }) => {
   };
 
   return (
-    <div className="card" style={{ background: '#000', color: '#fff', position: 'relative', overflow: 'hidden', padding: 0 }}>
-      <div style={{ padding: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.8)', position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
-        <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          {manualMode ? <Keyboard size={20} /> : <Camera size={20} />}
-          {manualMode ? 'Manual Entry' : 'Smart Barcode Scanner'}
+    <div className="glass-card" style={{ background: '#0f172a', color: '#fff', position: 'relative', overflow: 'hidden', padding: 0, boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)' }}>
+      <div style={{ padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(15, 23, 42, 0.8)', backdropFilter: 'blur(8px)', position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10, borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+        <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1.1rem', letterSpacing: '0.5px' }}>
+          {manualMode ? <Keyboard size={20} className="fade-in" /> : <Camera size={20} className="fade-in" />}
+          <span style={{ textTransform: 'uppercase', fontStyle: 'italic', fontWeight: 800 }}>SmartScan AI</span>
         </h3>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
           <button 
-            className="btn btn-outline" 
-            style={{ color: '#fff', border: '1px solid #444', padding: '0.3rem' }}
+            className="btn-icon" 
+            style={{ 
+              background: manualMode ? 'var(--primary)' : 'rgba(255,255,255,0.1)', 
+              color: '#fff', 
+              border: 'none', 
+              borderRadius: '10px', 
+              width: '40px', 
+              height: '40px', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.3s'
+            }}
             onClick={() => setManualMode(!manualMode)}
-            title={manualMode ? "Switch to Camera" : "Switch to Manual"}
           >
             {manualMode ? <Camera size={20} /> : <Keyboard size={20} />}
           </button>
-          <button className="btn btn-outline" style={{ color: '#fff', border: '1px solid #444', padding: '0.3rem' }} onClick={onClose}>
+          <button 
+            className="btn-icon" 
+            style={{ 
+              background: 'rgba(239, 68, 68, 0.2)', 
+              color: '#f87171', 
+              border: 'none', 
+              borderRadius: '10px', 
+              width: '40px', 
+              height: '40px', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              cursor: 'pointer'
+            }} 
+            onClick={onClose}
+          >
             <X size={20} />
           </button>
         </div>
       </div>
 
-      <div style={{ marginTop: '3.5rem', minHeight: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '400px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         {manualMode ? (
-          <div style={{ padding: '2rem', width: '100%' }}>
+          <div style={{ padding: '3rem 2rem', width: '100%', maxWidth: '400px' }} className="fade-in">
             <form onSubmit={handleManualSubmit}>
-              <div className="form-group">
-                <label className="label" style={{ color: '#aaa' }}>Enter Barcode Manually</label>
+              <div className="form-group" style={{ marginBottom: '2rem' }}>
+                <label className="label" style={{ color: 'rgba(255,255,255,0.5)', textAlign: 'center', width: '100%' }}>BARCODE INPUT</label>
                 <input 
                   type="text" 
                   autoFocus
-                  placeholder="Type or paste barcode..." 
+                  placeholder="0000000000000" 
                   value={manualBarcode}
                   onChange={(e) => setManualBarcode(e.target.value)}
-                  style={{ background: '#222', color: '#fff', borderColor: '#444' }}
+                  style={{ 
+                    background: 'rgba(255,255,255,0.05)', 
+                    color: '#fff', 
+                    border: '2px solid rgba(255,255,255,0.1)', 
+                    textAlign: 'center',
+                    fontSize: '1.5rem',
+                    letterSpacing: '4px',
+                    padding: '1.5rem'
+                  }}
                 />
               </div>
-              <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>Submit Barcode</button>
+              <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '1.2rem', fontSize: '1.1rem' }}>IDENTIFY PRODUCT</button>
             </form>
           </div>
         ) : (
           <>
             {error ? (
-              <div style={{ padding: '2rem', textAlign: 'center' }}>
-                <RefreshCw size={48} style={{ color: 'var(--danger)', marginBottom: '1rem' }} />
-                <p style={{ color: 'var(--danger)' }}>{error}</p>
-                <button className="btn btn-outline" onClick={() => startScanning(selectedCamera)} style={{ marginTop: '1rem', color: '#fff' }}>Retry</button>
+              <div style={{ padding: '2rem', textAlign: 'center' }} className="fade-in">
+                <RefreshCw size={48} style={{ color: 'var(--danger)', marginBottom: '1.5rem', animation: 'spin 2s linear infinite' }} />
+                <p style={{ color: '#fca5a5', fontWeight: 500 }}>{error}</p>
+                <button className="btn btn-outline" onClick={() => startScanning(selectedCamera)} style={{ marginTop: '1.5rem', color: '#fff', borderColor: 'rgba(255,255,255,0.2)' }}>RETRY CONNECTION</button>
               </div>
             ) : (
-              <div style={{ position: 'relative', width: '100%', minHeight: '300px', maxHeight: '70vh', background: '#000' }}>
-                <video ref={videoRef} style={{ width: '100%', height: '100%', maxHeight: '70vh', objectFit: 'cover' }} />
-                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, border: '2px dashed rgba(255,255,255,0.3)', pointerEvents: 'none', margin: '40px' }}>
+              <div style={{ position: 'relative', width: '100%', height: '450px', background: '#000' }}>
+                <video ref={videoRef} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
+                <div style={{ 
+                  position: 'absolute', 
+                  top: '20%', 
+                  left: '10%', 
+                  right: '10%', 
+                  bottom: '20%', 
+                  border: '2px solid rgba(99, 102, 241, 0.5)', 
+                  borderRadius: '24px',
+                  boxShadow: '0 0 0 1000px rgba(15, 23, 42, 0.7)',
+                  pointerEvents: 'none'
+                }}>
                   <div style={{ 
                     position: 'absolute', 
                     top: '50%', 
-                    left: 0, 
-                    right: 0, 
-                    height: '2px', 
+                    left: '5%', 
+                    right: '5%', 
+                    height: '3px', 
                     background: 'var(--primary)', 
-                    boxShadow: '0 0 10px var(--primary)',
-                    animation: 'scan-line 3s linear infinite'
+                    boxShadow: '0 0 20px var(--primary), 0 0 40px var(--primary)',
+                    animation: 'scan-line 2.5s ease-in-out infinite',
+                    borderRadius: '50%'
                   }} />
+                  
+                  {/* Corner Accents */}
+                  <div style={{ position: 'absolute', top: -2, left: -2, width: 30, height: 30, borderTop: '4px solid var(--primary)', borderLeft: '4px solid var(--primary)', borderRadius: '12px 0 0 0' }} />
+                  <div style={{ position: 'absolute', top: -2, right: -2, width: 30, height: 30, borderTop: '4px solid var(--primary)', borderRight: '4px solid var(--primary)', borderRadius: '0 12px 0 0' }} />
+                  <div style={{ position: 'absolute', bottom: -2, left: -2, width: 30, height: 30, borderBottom: '4px solid var(--primary)', borderLeft: '4px solid var(--primary)', borderRadius: '0 0 0 12px' }} />
+                  <div style={{ position: 'absolute', bottom: -2, right: -2, width: 30, height: 30, borderBottom: '4px solid var(--primary)', borderRight: '4px solid var(--primary)', borderRadius: '0 0 12px 0' }} />
                 </div>
               </div>
             )}
             
             {cameras.length > 1 && (
-              <div style={{ padding: '1rem', width: '100%', background: '#111' }}>
+              <div style={{ padding: '1.25rem', width: '100%', background: 'rgba(0,0,0,0.3)', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
                 <select 
                   value={selectedCamera} 
                   onChange={(e) => setSelectedCamera(e.target.value)}
-                  style={{ background: '#222', color: '#fff', border: '1px solid #444', height: '40px' }}
+                  style={{ background: 'rgba(15, 23, 42, 0.6)', color: '#fff', border: '1px solid rgba(255,255,255,0.1)', height: '48px', margin: 0 }}
                 >
-                  {cameras.map(c => <option key={c.deviceId} value={c.deviceId}>{c.label || `Camera ${c.deviceId.slice(0,5)}`}</option>)}
+                  {cameras.map(c => <option key={c.deviceId} value={c.deviceId}>{c.label || `LENS ${c.deviceId.slice(0,5).toUpperCase()}`}</option>)}
                 </select>
               </div>
             )}
