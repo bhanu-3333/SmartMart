@@ -42,9 +42,9 @@ const AdminDashboard = () => {
 
   return (
     <div className="container fade-in">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <div className="flex-between" style={{ marginBottom: '2rem' }}>
         <h1>Admin Analytics</h1>
-        <div style={{ display: 'flex', gap: '1rem' }}>
+        <div className="flex-group">
           <button className={`btn ${view === 'overview' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setView('overview')}>Overview</button>
           <button className={`btn ${view === 'products' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setView('products')}>Product List</button>
         </div>
@@ -53,27 +53,27 @@ const AdminDashboard = () => {
       {view === 'overview' ? (
         <>
           <div className="grid grid-4" style={{ marginBottom: '3rem' }}>
-            <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', borderTop: '4px solid var(--primary)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div className="card" style={{ borderTop: '4px solid var(--primary)' }}>
+              <div className="flex-between" style={{ alignItems: 'flex-start' }}>
                 <div style={{ background: 'rgba(99, 102, 241, 0.1)', color: 'var(--primary)', padding: '0.75rem', borderRadius: '12px' }}>
                   <DollarSign size={24} />
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Today's Revenue</div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.825rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Today's Revenue</div>
                   <div style={{ fontSize: '1.75rem', fontWeight: 800 }}>${todayStats.todayRevenue.toFixed(2)}</div>
                 </div>
               </div>
             </div>
 
-            <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', borderTop: '4px solid var(--success)', cursor: 'pointer' }} onClick={() => setShowCustomerModal(true)}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div className="card" style={{ borderTop: '4px solid var(--success)', cursor: 'pointer' }} onClick={() => setShowCustomerModal(true)}>
+              <div className="flex-between" style={{ alignItems: 'flex-start' }}>
                 <div style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)', padding: '0.75rem', borderRadius: '12px' }}>
                   <Users size={24} />
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Today's Customers</div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.825rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Today's Customers</div>
                   <div style={{ fontSize: '1.75rem', fontWeight: 800 }}>{todayStats.todayCustomerCount}</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: 'var(--success)', fontSize: '0.75rem', fontWeight: 600, justifyContent: 'flex-end', marginTop: '0.25rem' }}>
+                  <div className="flex-group" style={{ color: 'var(--success)', fontSize: '0.75rem', fontWeight: 600, justifyContent: 'flex-end', marginTop: '0.25rem', gap: '0.25rem' }}>
                     View Records <ChevronRight size={14} />
                   </div>
                 </div>
@@ -169,11 +169,11 @@ const AdminDashboard = () => {
       )}
 
       {showCustomerModal && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
-          <div className="card" style={{ width: '100%', maxWidth: '800px', maxHeight: '90vh', overflowY: 'auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000, padding: '1rem' }}>
+          <div className="card" style={{ width: '100%', maxWidth: '800px', maxHeight: '95vh', overflowY: 'auto' }}>
+            <div className="flex-between" style={{ marginBottom: '1.5rem' }}>
               <h2>Today's Customers</h2>
-              <button className="btn btn-outline" onClick={() => setShowCustomerModal(false)}><X size={20} /></button>
+              <button className="btn btn-outline" style={{ padding: '0.4rem' }} onClick={() => setShowCustomerModal(false)}><X size={20} /></button>
             </div>
             <table>
               <thead>
