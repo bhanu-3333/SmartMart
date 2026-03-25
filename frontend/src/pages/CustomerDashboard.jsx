@@ -161,14 +161,14 @@ const CustomerDashboard = () => {
                   <Scanner onScan={handleScan} onClose={() => setScanning(false)} />
                 </div>
               ) : (
-                <button className="btn btn-primary" onClick={() => setScanning(true)} style={{ padding: '2rem 4rem', fontSize: '1.2rem' }}>
+                <button className="btn btn-primary" onClick={() => setScanning(true)} style={{ width: '100%', padding: '1.5rem', fontSize: '1.1rem' }}>
                   Start Scanning
                 </button>
               )}
 
               {message.text && (
-                <div className={`badge ${message.type === 'success' ? 'badge-success' : 'badge-danger'}`} style={{ marginTop: '1.5rem', padding: '1rem' }}>
-                  {message.type === 'success' ? <CheckCircle size={18} /> : <AlertCircle size={18} />}
+                <div className={`badge ${message.type === 'success' ? 'badge-success' : 'badge-danger'}`} style={{ marginTop: '1.5rem', padding: '0.75rem', fontSize: '0.85rem' }}>
+                  {message.type === 'success' ? <CheckCircle size={16} /> : <AlertCircle size={16} />}
                   {message.text}
                 </div>
               )}
@@ -179,12 +179,12 @@ const CustomerDashboard = () => {
             <div className="card">
               <h2><ShoppingCart size={24} /> Your Cart</h2>
               {cart.items.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '4rem 2rem', color: 'var(--text-muted)' }}>
-                  <div style={{ background: 'var(--bg)', width: '80px', height: '80px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
-                    <ShoppingCart size={40} style={{ opacity: 0.4 }} />
+                <div style={{ textAlign: 'center', padding: '2rem 1rem', color: 'var(--text-muted)' }}>
+                  <div style={{ background: 'var(--bg)', width: '60px', height: '60px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
+                    <ShoppingCart size={32} style={{ opacity: 0.4 }} />
                   </div>
                   <h3>Your cart is empty</h3>
-                  <p>Scan a product to see it appear here!</p>
+                  <p style={{ fontSize: '0.9rem' }}>Scan a product to see it appear here!</p>
                 </div>
               ) : (
                 <>
@@ -193,7 +193,7 @@ const CustomerDashboard = () => {
                       <thead>
                         <tr>
                           <th>Product</th>
-                          <th style={{ textAlign: 'center' }}>Quantity</th>
+                          <th style={{ textAlign: 'center' }}>Qty</th>
                           <th>Weight</th>
                           <th>Total</th>
                           <th></th>
@@ -202,41 +202,41 @@ const CustomerDashboard = () => {
                       <tbody>
                         {cart.items.map((item) => (
                           <tr key={item.productId._id}>
-                            <td>
-                              <div style={{ fontWeight: 600, color: 'var(--text)' }}>{item.productId.name}</div>
-                              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'monospace' }}>{item.productId.barcode}</div>
+                            <td style={{ minWidth: '120px' }}>
+                              <div style={{ fontWeight: 600, color: 'var(--text)', fontSize: '0.9rem' }}>{item.productId.name}</div>
+                              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'monospace' }}>{item.productId.barcode}</div>
                             </td>
                             <td>
                               <div style={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
                                 background: 'var(--bg)', 
-                                padding: '0.25rem', 
-                                borderRadius: '10px',
+                                padding: '0.2rem', 
+                                borderRadius: '8px',
                                 width: 'fit-content',
                                 margin: '0 auto'
                               }}>
                                 <button 
                                   className="btn-icon" 
-                                  style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: '6px', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                                  style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: '4px', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '0.8rem' }}
                                   onClick={() => handleUpdateQuantity(item.productId._id, item.quantity, -1)}
                                 >-</button>
-                                <span style={{ fontWeight: 700, margin: '0 0.75rem', minWidth: '20px', textAlign: 'center' }}>{item.quantity}</span>
+                                <span style={{ fontWeight: 700, margin: '0 0.5rem', minWidth: '16px', textAlign: 'center', fontSize: '0.9rem' }}>{item.quantity}</span>
                                 <button 
                                   className="btn-icon" 
-                                  style={{ background: 'var(--primary)', border: 'none', color: '#fff', borderRadius: '6px', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                                  style={{ background: 'var(--primary)', border: 'none', color: '#fff', borderRadius: '4px', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '0.8rem' }}
                                   onClick={() => handleUpdateQuantity(item.productId._id, item.quantity, 1)}
                                 >+</button>
                               </div>
                             </td>
-                            <td style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{item.productId.weightValue}{item.productId.weightUnit}</td>
-                            <td style={{ fontWeight: 600 }}>${(item.productId.price * item.quantity).toFixed(2)}</td>
+                            <td style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>{item.productId.weightValue}{item.productId.weightUnit}</td>
+                            <td style={{ fontWeight: 600, fontSize: '0.9rem' }}>${(item.productId.price * item.quantity).toFixed(2)}</td>
                             <td>
                               <button 
-                                style={{ background: 'none', border: 'none', color: 'var(--danger)', cursor: 'pointer', padding: '0.5rem', display: 'flex' }} 
+                                style={{ background: 'none', border: 'none', color: 'var(--danger)', cursor: 'pointer', padding: '0.4rem', display: 'flex' }} 
                                 onClick={() => handleRemove(item.productId._id)}
                               >
-                                <Trash2 size={18} />
+                                <Trash2 size={16} />
                               </button>
                             </td>
                           </tr>
@@ -248,20 +248,20 @@ const CustomerDashboard = () => {
                   <div style={{ 
                     background: 'var(--bg)', 
                     borderRadius: '16px', 
-                    padding: '1.5rem', 
-                    marginTop: '2rem',
+                    padding: '1.25rem', 
+                    marginTop: '1.5rem',
                     border: '1px solid var(--border)'
                   }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
                       <span style={{ color: 'var(--text-muted)' }}>Net Weight</span>
                       <span style={{ fontWeight: 600 }}>{formatWeight(totalWeightGrams)}</span>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-                      <span style={{ fontSize: '1.1rem', fontWeight: 600 }}>Grand Total</span>
-                      <span style={{ color: 'var(--primary)', fontSize: '1.5rem', fontWeight: 800 }}>${totalAmount.toFixed(2)}</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+                      <span style={{ fontSize: '1rem', fontWeight: 600 }}>Grand Total</span>
+                      <span style={{ color: 'var(--primary)', fontSize: '1.25rem', fontWeight: 800 }}>${totalAmount.toFixed(2)}</span>
                     </div>
-                    <button className="btn btn-primary" style={{ width: '100%', padding: '1.2rem', fontSize: '1rem', boxShadow: '0 8px 16px -4px rgba(99, 102, 241, 0.4)' }} onClick={handlePlaceOrder} disabled={loading}>
-                      {loading ? 'Processing...' : 'Secure Checkout'}
+                    <button className="btn btn-primary" style={{ width: '100%', padding: '1rem', fontSize: '1rem' }} onClick={handlePlaceOrder} disabled={loading}>
+                      {loading ? 'Processing...' : 'Checkout'}
                     </button>
                   </div>
                 </>
