@@ -105,19 +105,12 @@ const StaffDashboard = () => {
 
   return (
     <div className="container fade-in">
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center', 
-        marginBottom: '2rem',
-        flexWrap: 'wrap',
-        gap: '1rem'
-      }}>
+      <div className="flex-between" style={{ marginBottom: '2rem' }}>
         <div>
           <h1 style={{ marginBottom: '0.25rem' }}>Centralized Inventory</h1>
           <p style={{ color: 'var(--text-muted)' }}>Managing products for the entire supermarket</p>
         </div>
-        <button className="btn btn-primary" style={{ width: '100%', maxWidth: '250px' }} onClick={() => { setShowModal(true); setEditingProduct(null); setFormData({ name: '', price: '', stock: '', barcode: '', weight: '' }); }}>
+        <button className="btn btn-primary" style={{ width: '100%', maxWidth: '250px' }} onClick={() => { setShowModal(true); setEditingProduct(null); setFormData({ name: '', price: '', stock: '', barcode: '', weightValue: '', weightUnit: 'kg' }); }}>
           <Plus size={18} /> Add Product
         </button>
       </div>
@@ -200,8 +193,8 @@ const StaffDashboard = () => {
 
       {showModal && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
-          <div className="card" style={{ width: '100%', maxWidth: '500px', animation: 'fadeIn 0.3s ease', maxHeight: '90vh', overflowY: 'auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+          <div className="card" style={{ width: '100%', maxWidth: '500px', animation: 'fadeIn 0.3s ease', maxHeight: '98vh', overflowY: 'auto' }}>
+            <div className="flex-between" style={{ marginBottom: '1.5rem' }}>
               <h2>{editingProduct ? 'Edit Product' : 'Add Product'}</h2>
               <button className="btn btn-outline" style={{ padding: '0.2rem' }} onClick={() => setShowModal(false)}>
                 <X size={20} />
@@ -215,20 +208,21 @@ const StaffDashboard = () => {
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label className="label">Barcode</label>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <div className="flex-group" style={{ gap: '0.5rem' }}>
                     <input 
                       type="text" 
                       placeholder="Scan or enter barcode" 
                       required 
                       value={formData.barcode}
                       onChange={(e) => setFormData({ ...formData, barcode: e.target.value })} 
+                      style={{ flex: 1, marginBottom: 0 }}
                     />
                     <button 
                       type="button" 
                       className="btn btn-outline" 
                       onClick={() => setShowScanner(true)}
                       title="Open Barcode Scanner"
-                      style={{ height: '45px' }}
+                      style={{ height: '48px', padding: '0 1rem' }}
                     >
                       <Camera size={18} />
                     </button>
@@ -266,23 +260,21 @@ const StaffDashboard = () => {
                       onChange={(e) => setFormData({ ...formData, stock: e.target.value })} 
                     />
                   </div>
-                  <div className="form-group" style={{ display: 'flex', gap: '0.5rem', marginBottom: 0 }}>
-                    <div style={{ flex: 2 }}>
-                      <label className="label">Weight</label>
+                  <div className="form-group">
+                    <label className="label">Weight</label>
+                    <div className="flex-group" style={{ gap: '0.5rem' }}>
                       <input 
                         type="number" 
                         step="0.1"
                         placeholder="0.0" 
                         value={formData.weightValue}
                         onChange={(e) => setFormData({ ...formData, weightValue: e.target.value })} 
+                        style={{ flex: 2, marginBottom: 0 }}
                       />
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <label className="label">Unit</label>
                       <select 
                         value={formData.weightUnit}
                         onChange={(e) => setFormData({ ...formData, weightUnit: e.target.value })}
-                        style={{ height: '45px' }}
+                        style={{ flex: 1, height: '48px', marginBottom: 0 }}
                       >
                         <option value="kg">kg</option>
                         <option value="g">g</option>
