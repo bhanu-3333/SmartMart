@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { BrowserMultiFormatReader, BarcodeFormat, DecodeHintType } from '@zxing/library';
-import { X, Camera, RefreshCw, Keyboard, CheckCircle } from 'lucide-react';
+import { X, Camera, RefreshCw, Keyboard, CheckCircle, AlertCircle } from 'lucide-react';
 
 const Scanner = ({ onScan, onClose }) => {
   const [error, setError] = useState('');
@@ -58,15 +58,31 @@ const Scanner = ({ onScan, onClose }) => {
   }, []);
 
   const startScanning = useCallback(async (deviceId) => {
+    console.log("startScanning called with:", deviceId);
     if (!codeReaderRef.current || !videoRef.current) return;
     
     try {
       setIsScanning(true);
       setError('');
-      
       console.log("Starting ZXing Scanner on device:", deviceId);
       
-      codeReaderRef.current.decodeFromVideoDevice(deviceId, videoRef.current, (result, err) => {
+      // Stop and reset any current reader state
+      codeReaderRef.current.reset();
+
+      const constraints = {
+        video: deviceId 
+          ? { deviceId: { exact: deviceId } } 
+          : { facingMode: { ideal: "environment" } }
+      };
+
+      // Set video attributes for mobile autoplay
+      if (videoRef.current) {
+        videoRef.current.muted = true;
+        videoRef.current.setAttribute('playsinline', 'true');
+        videoRef.current.setAttribute('autoplay', 'true');
+      }
+
+      await codeReaderRef.current.decodeFromConstraints(constraints, videoRef.current, (result, err) => {
         if (result) {
           const code = result.getText();
           const now = Date.now();
@@ -97,13 +113,20 @@ const Scanner = ({ onScan, onClose }) => {
       });
     } catch (err) {
       console.error('Scanner Start Error:', err);
-      setError('Failed to start scanner');
+      // More descriptive error for the user
+      let userMsg = 'Failed to start camera';
+      if (err.name === 'NotAllowedError') userMsg = 'Camera Permission Denied';
+      else if (err.name === 'NotFoundError') userMsg = 'No Camera Device Found';
+      else if (err.name === 'NotReadableError') userMsg = 'Camera is already in use by another app';
+      else userMsg = `Camera Error: ${err.message}`;
+
+      setError(userMsg);
       setIsScanning(false);
     }
   }, [onScan]);
 
   useEffect(() => {
-    if (selectedCamera && !manualMode) {
+    if (!manualMode) {
       startScanning(selectedCamera);
     } else if (manualMode && codeReaderRef.current) {
       codeReaderRef.current.reset();
@@ -195,6 +218,14 @@ const Scanner = ({ onScan, onClose }) => {
           </div>
         ) : (
           <>
+            {!window.isSecureContext && (
+              <div style={{ padding: '2rem', textAlign: 'center', background: 'rgba(239, 68, 68, 0.1)', color: '#fca5a5' }}>
+                <AlertCircle size={40} style={{ marginBottom: '1rem' }} />
+                <h4 style={{ margin: '0 0 0.5rem' }}>Secure Context Required</h4>
+                <p style={{ fontSize: '0.85rem', margin: 0 }}>Camera access requires an **HTTPS** connection. please ensure you are visiting the `https://` version of your website.</p>
+              </div>
+            )}
+
             {error ? (
               <div style={{ padding: '2rem', textAlign: 'center' }} className="fade-in">
                 <RefreshCw size={48} style={{ color: 'var(--danger)', marginBottom: '1.5rem', animation: 'spin 2s linear infinite' }} />
@@ -203,7 +234,13 @@ const Scanner = ({ onScan, onClose }) => {
               </div>
             ) : (
               <div style={{ position: 'relative', width: '100%', height: '450px', background: '#000' }}>
-                <video ref={videoRef} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
+                <video 
+                  ref={videoRef} 
+                  muted 
+                  playsInline 
+                  autoPlay 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                />
                 <div style={{ 
                   position: 'absolute', 
                   top: '20%', 
