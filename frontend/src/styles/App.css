@@ -18,6 +18,15 @@
   --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --glass: rgba(255, 255, 255, 0.8);
   --glass-blur: blur(16px);
+  --container-padding: 2rem;
+  --card-padding: 2.5rem;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --container-padding: 1rem;
+    --card-padding: 1.25rem;
+  }
 }
 
 * {
@@ -34,18 +43,20 @@ body {
 }
 
 .container {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: var(--container-padding);
 }
 
 .card {
   background: var(--card-bg);
   border-radius: var(--radius);
-  padding: 2.5rem;
+  padding: var(--card-padding);
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden; /* Prevent content bleed on mobile */
 }
 
 .card:hover {
@@ -58,7 +69,7 @@ body {
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border-radius: 24px;
-  padding: 2.5rem;
+  padding: var(--card-padding);
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: var(--shadow-lg);
 }
@@ -201,8 +212,29 @@ img, video {
 }
 
 .auth-card {
-  width: 100%;
-  max-width: 400px;
+  width: 95%;
+  max-width: 420px;
+  margin: 1rem;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.btn-icon:hover {
+  opacity: 0.7;
+}
+
+/* Modal Responsiveness */
+.modal-overlay {
+  padding: 1rem;
 }
 
 /* Tables */
@@ -243,16 +275,42 @@ th {
 }
 
 .grid-2 {
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
 }
 
 .grid-3 {
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+}
+
+.grid-4 {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+table {
+  min-width: 600px; /* Ensure table doesn't squash too small */
+  width: 100%;
+  border-collapse: collapse;
 }
 
 @media (max-width: 640px) {
-  .grid-2, .grid-3 {
+  .grid-2, .grid-3, .grid-4 {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.5rem; }
+  
+  .card, .glass-card {
+    padding: 1.25rem;
   }
 }
 
