@@ -27,6 +27,10 @@ const Scanner = ({ onScan, onClose }) => {
   ]);
 
   useEffect(() => {
+    if (!window.isSecureContext) {
+      console.warn("Scanner: Camera access requires a secure context (HTTPS). Localhost is usually exempted by browsers.");
+    }
+
     const codeReader = new BrowserMultiFormatReader(hints);
     codeReaderRef.current = codeReader;
 
