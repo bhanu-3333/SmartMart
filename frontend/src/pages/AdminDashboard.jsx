@@ -52,7 +52,7 @@ const AdminDashboard = () => {
 
       {view === 'overview' ? (
         <>
-          <div className="grid grid-4" style={{ marginBottom: '3rem', gap: '1.5rem' }}>
+          <div className="grid grid-4" style={{ marginBottom: '3rem' }}>
             <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', borderTop: '4px solid var(--primary)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div style={{ background: 'rgba(99, 102, 241, 0.1)', color: 'var(--primary)', padding: '0.75rem', borderRadius: '12px' }}>
@@ -141,24 +141,26 @@ const AdminDashboard = () => {
               <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem', color: 'var(--danger)' }}>
                 <AlertTriangle size={20} /> Low Stock Alerts
               </h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Product</th>
-                    <th>Stock</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stats.lowStockProducts.map(product => (
-                    <tr key={product._id}>
-                      <td>{product.name}</td>
-                      <td><span className="badge badge-danger">{product.stock} units</span></td>
-                      <td><button className="btn btn-outline" style={{ padding: '0.2rem 0.5rem' }}>Refill</button></td>
+              <div className="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Stock</th>
+                      <th>Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {stats.lowStockProducts.map(product => (
+                      <tr key={product._id}>
+                        <td>{product.name}</td>
+                        <td><span className="badge badge-danger">{product.stock} units</span></td>
+                        <td><button className="btn btn-outline" style={{ padding: '0.2rem 0.5rem' }}>Refill</button></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </>
