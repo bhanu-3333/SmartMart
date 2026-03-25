@@ -105,13 +105,20 @@ const StaffDashboard = () => {
 
   return (
     <div className="container fade-in">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        marginBottom: '2rem',
+        flexWrap: 'wrap',
+        gap: '1rem'
+      }}>
         <div>
-          <h1>Centralized Inventory</h1>
+          <h1 style={{ marginBottom: '0.25rem' }}>Centralized Inventory</h1>
           <p style={{ color: 'var(--text-muted)' }}>Managing products for the entire supermarket</p>
         </div>
-        <button className="btn btn-primary" onClick={() => { setShowModal(true); setEditingProduct(null); setFormData({ name: '', price: '', stock: '', barcode: '', weight: '' }); }}>
-          <Plus size={18} /> Add New Product
+        <button className="btn btn-primary" style={{ width: '100%', maxWidth: '250px' }} onClick={() => { setShowModal(true); setEditingProduct(null); setFormData({ name: '', price: '', stock: '', barcode: '', weight: '' }); }}>
+          <Plus size={18} /> Add Product
         </button>
       </div>
 
