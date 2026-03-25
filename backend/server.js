@@ -17,6 +17,11 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
+// Health Check / Welcome
+app.get('/', (req, res) => {
+  res.send('SmartMart API is running...');
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
