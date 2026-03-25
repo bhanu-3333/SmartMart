@@ -140,7 +140,7 @@ const CustomerDashboard = () => {
 
   return (
     <div className="container fade-in">
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
+      <div className="flex-group" style={{ marginBottom: '2rem' }}>
         <button className={`btn ${activeTab === 'shop' ? 'btn-primary' : 'btn-outline'}`} onClick={() => setActiveTab('shop')}>
           <ShoppingCart size={18} /> Shop Now
         </button>
@@ -252,11 +252,11 @@ const CustomerDashboard = () => {
                     marginTop: '1.5rem',
                     border: '1px solid var(--border)'
                   }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
+                    <div className="flex-between" style={{ marginBottom: '0.5rem', fontSize: '0.9rem' }}>
                       <span style={{ color: 'var(--text-muted)' }}>Net Weight</span>
                       <span style={{ fontWeight: 600 }}>{formatWeight(totalWeightGrams)}</span>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+                    <div className="flex-between" style={{ marginBottom: '1.25rem' }}>
                       <span style={{ fontSize: '1rem', fontWeight: 600 }}>Grand Total</span>
                       <span style={{ color: 'var(--primary)', fontSize: '1.25rem', fontWeight: 800 }}>${totalAmount.toFixed(2)}</span>
                     </div>
@@ -278,15 +278,15 @@ const CustomerDashboard = () => {
             <div className="grid grid-1" style={{ gap: '1.5rem' }}>
               {orders.map(order => (
                 <div key={order._id} className="card" style={{ background: 'var(--bg-muted)', borderLeft: '4px solid var(--primary)' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                  <div className="flex-between" style={{ marginBottom: '1rem' }}>
                     <div>
                       <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>ORDER ID: {order._id}</div>
                       <div style={{ fontWeight: 700 }}>{new Date(order.createdAt).toLocaleString()}</div>
                     </div>
-                      <div style={{ textAlign: 'right' }}>
-                        <div style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '1.2rem' }}>${order.totalAmount.toFixed(2)}</div>
-                        <div style={{ fontSize: '0.875rem' }}>Total Weight: {order.totalWeight}</div>
-                      </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '1.2rem' }}>${order.totalAmount.toFixed(2)}</div>
+                      <div style={{ fontSize: '0.875rem' }}>Total Weight: {order.totalWeight}</div>
+                    </div>
                   </div>
                     <div className="table-container">
                       <table style={{ background: 'white' }}>
