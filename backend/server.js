@@ -8,21 +8,22 @@ const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 
+// Initialize Express Application
 const app = express();
 
-// Connect Database
+// Connect to MongoDB Database
 connectDB();
 
-// Middleware
+// Global Middleware
 app.use(cors());
 app.use(express.json());
 
-// Health Check / Welcome
+// Root / Health Check Endpoint
 app.get('/', (req, res) => {
   res.send('SmartMart API is running...');
 });
 
-// Routes
+// App Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
