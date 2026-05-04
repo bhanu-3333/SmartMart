@@ -10,3 +10,6 @@ Thank you for considering contributing to this repository!
 5. Open a Pull Request
 
 Please ensure your code formatting is consistent before opening a PR.
+
+- Use clear variable names.
+- Comment complex logic.
