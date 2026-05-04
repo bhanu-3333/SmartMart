@@ -5,3 +5,5 @@ Ensure you are using the latest version. Older versions may not receive security
 
 ## Reporting a Vulnerability
 If you discover a security vulnerability within this project, please notify the maintainers directly through email rather than creating a public issue. We will work to address the vulnerability promptly.
+
+Contact: security@example.com
