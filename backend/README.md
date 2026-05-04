@@ -14,3 +14,6 @@ This is the backend for the application, built with Node.js and Express.
 - `middleware/` - Express middlewares.
 - `models/` - Mongoose or database models.
 - `routes/` - Express routing definitions.
+
+---
+*Last Updated: May 2026*
